@@ -1,8 +1,9 @@
 from PIL import Image, ImageDraw, ImageFont
 import os
+import random
 
-def add_text_watermark(input_image_path, output_image_path, text="Activaarts", font_size=150, opacity=255):
-    """Adds a bold, embossed, outlined, and slightly rotated text watermark at 1/3 from the bottom and 1/4 from the right side of a painting."""
+def add_text_watermark(input_image_path, output_image_path, text="Activaarts", font_size=150, opacity=120):
+    """Adds a faint, scratched, and slightly rotated text watermark at 1/3 from the bottom and 1/4 from the right side of a painting."""
     image = Image.open(input_image_path).convert("RGBA")
     watermark_layer = Image.new("RGBA", image.size, (0, 0, 0, 0))
     
@@ -19,15 +20,16 @@ def add_text_watermark(input_image_path, output_image_path, text="Activaarts", f
     temp_layer = Image.new("RGBA", image.size, (0, 0, 0, 0))
     temp_draw = ImageDraw.Draw(temp_layer)
     
-    # Create an outline for the text (Stroke effect)
-    outline_color = (0, 0, 0, opacity)  # Black outline
+    # Create a scratched effect by adding random noise around the text
+    outline_color = (50, 50, 50, opacity)  # Dark gray outline to make it faint
     offset = 5
-    for dx in [-offset, offset]:
-        for dy in [-offset, offset]:
-            temp_draw.text((position[0] + dx, position[1] + dy), text, font=font, fill=outline_color)
+    for _ in range(10):  # Adding noise for a scratched effect
+        noise_x = random.randint(-10, 10)
+        noise_y = random.randint(-10, 10)
+        temp_draw.text((position[0] + noise_x, position[1] + noise_y), text, font=font, fill=outline_color)
     
-    # Add main text with embossed effect
-    temp_draw.text(position, text, fill=(255, 0, 0, opacity), font=font)  # Using a bold red color
+    # Add main text with lower opacity to make it faint
+    temp_draw.text(position, text, fill=(200, 200, 200, opacity), font=font)  # Light gray for a subtle effect
     
     # Rotate the watermark layer
     temp_layer = temp_layer.rotate(-15, expand=1)
@@ -38,8 +40,8 @@ def add_text_watermark(input_image_path, output_image_path, text="Activaarts", f
     watermarked_image.convert("RGB").save(output_image_path, "JPEG")
     print(f"Watermark added to {output_image_path}")
 
-def process_folder(input_folder, output_folder, font_size=150, opacity=255):
-    """Processes all paintings in a folder and applies a bold, positioned text watermark."""
+def process_folder(input_folder, output_folder, font_size=150, opacity=120):
+    """Processes all paintings in a folder and applies a faint, scratched text watermark."""
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
     
@@ -53,4 +55,4 @@ if __name__ == "__main__":
     input_folder = r"C:\Users\HP\Downloads\bootstrap\bootstrap-ecommerce\activaarts\public\storage\products"  # Change to your folder path
     output_folder = r"C:\Users\HP\Pictures\Add Watermark"
     
-    process_folder(input_folder, output_folder, font_size=150, opacity=255)
+    process_folder(input_folder, output_folder, font_size=150, opacity=120)
