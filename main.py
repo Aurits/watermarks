@@ -2,7 +2,7 @@ from PIL import Image, ImageDraw, ImageFont
 import os
 import random
 
-def add_text_watermark(input_image_path, output_image_path, text="Activaarts", font_size=150, opacity=120):
+def add_text_watermark(input_image_path, output_image_path, text="Activaarts", font_size=250, opacity=120):
     """Adds a faint, scratched, and slightly rotated text watermark at 1/3 from the bottom and 1/4 from the right side of a painting."""
     image = Image.open(input_image_path).convert("RGBA")
     watermark_layer = Image.new("RGBA", image.size, (0, 0, 0, 0))
@@ -40,7 +40,7 @@ def add_text_watermark(input_image_path, output_image_path, text="Activaarts", f
     watermarked_image.convert("RGB").save(output_image_path, "JPEG")
     print(f"Watermark added to {output_image_path}")
 
-def process_folder(input_folder, output_folder, font_size=150, opacity=120):
+def process_folder(input_folder, output_folder, font_size=250, opacity=120):
     """Processes all paintings in a folder and applies a faint, scratched text watermark."""
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
@@ -55,4 +55,4 @@ if __name__ == "__main__":
     input_folder = r"C:\Users\HP\Downloads\bootstrap\bootstrap-ecommerce\activaarts\public\storage\products"  # Change to your folder path
     output_folder = r"C:\Users\HP\Pictures\Add Watermark"
     
-    process_folder(input_folder, output_folder, font_size=150, opacity=120)
+    process_folder(input_folder, output_folder, font_size=250, opacity=120)
